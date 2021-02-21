@@ -5,11 +5,7 @@ import com.vacancydiary.inmost.demo.model.Vacancy;
 import com.vacancydiary.inmost.demo.repository.UserRepository;
 import com.vacancydiary.inmost.demo.repository.VacancyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
