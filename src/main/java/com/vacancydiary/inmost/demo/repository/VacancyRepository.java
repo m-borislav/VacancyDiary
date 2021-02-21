@@ -14,5 +14,4 @@ import java.util.List;
 public interface VacancyRepository extends CrudRepository<Vacancy, Long> {
     List<Vacancy> findByUser(User user);
     List<Vacancy> findByCompanyName(String companyName);
-    List<Vacancy> findByVacancyStatus(VacancyStatus vacancyStatus);
 }

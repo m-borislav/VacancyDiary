@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @Service
 public class VacancyService {
 
-    private VacancyRepository vacancyRepository;
-    private UserRepository userRepository;
+    private final VacancyRepository vacancyRepository;
+    private final UserRepository userRepository;
 
     @Autowired
 
@@ -61,10 +61,9 @@ public class VacancyService {
 
     public List<Vacancy> filterByVacancyStatus(String vacancyStatus, Long user_id){
         User user = userRepository.findById(user_id).get();
-        List<Vacancy> filteredVacancies = vacancyRepository.findByUser(user)
+        return vacancyRepository.findByUser(user)
                 .stream()
                 .filter(vacancy -> vacancy.getVacancyStatus().toString().equals(vacancyStatus))
                 .collect(Collectors.toList());
-        return filteredVacancies;
     }
 }

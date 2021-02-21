@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RegisterController {
 
-    private UserService userService;
-    private RegisterService registerService;
+    private final UserService userService;
+    private final RegisterService registerService;
 
     @Autowired
-
     public RegisterController(UserService userService,
                               RegisterService registerService) {
         this.userService = userService;
@@ -36,7 +35,6 @@ public class RegisterController {
         if (userDetails != null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } else {
-
             return ResponseEntity.ok(registerService.registerUser(user));
         }
     }

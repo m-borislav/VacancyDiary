@@ -35,21 +35,20 @@ public class VacancyController {
 
 
     @ApiOperation(value = "Creat new note about vacancy")
-    @PostMapping(value = "/{user_id}/vacancy/add", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Vacancy> addNewVacancy(@RequestBody Vacancy vacancy, @PathVariable Long user_id) {
-
-        vacancyService.addVacancy(vacancy, user_id);
+    @PostMapping(value = "/{userId}/vacancy/add", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Vacancy> addNewVacancy(@RequestBody Vacancy vacancy, @PathVariable Long userId) {
+        vacancyService.addVacancy(vacancy, userId);
         return ResponseEntity.ok(vacancy);
     }
 
     @ApiOperation(value = "Show all user`s vacancies")
-    @GetMapping(value = "/{user_id}/vacancy")
-    public ResponseEntity<List<Vacancy>> showAllUserVacancy(@PathVariable Long user_id) {
-        User user = userRepository.findById(user_id).get();
-        if (user == null) {
+    @GetMapping(value = "/{userId}/vacancy")
+    public ResponseEntity<List<Vacancy>> showAllUserVacancy(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElse(new User());
+        if (user.getId() == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity(vacancyService.findByUser(user), HttpStatus.OK);
+            return new ResponseEntity<>(vacancyService.findByUser(user), HttpStatus.OK);
         }
     }
 
@@ -67,11 +66,11 @@ public class VacancyController {
     @ApiOperation(value = "Get vacancy by id")
     @GetMapping(value = "/vacancy/{vacancy_id}")
     public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long vacancy_id) {
-        Vacancy vacancy = vacancyRepository.findById(vacancy_id).get();
-        if (vacancy == null) {
+        Vacancy vacancy = vacancyRepository.findById(vacancy_id).orElse(new Vacancy());
+        if (vacancy.getId() == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity(vacancy, HttpStatus.OK);
+            return new ResponseEntity<>(vacancy, HttpStatus.OK);
         }
     }
 
@@ -82,28 +81,18 @@ public class VacancyController {
                                                @RequestBody Vacancy vacancy) {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User userFromDb = userRepository.findById(userId).get();
+        User userFromDb = userRepository.findById(userId).orElse(new User());
         if (userFromDb.getUsername().equals(userDetails.getUsername())) {
-            return new ResponseEntity(vacancyService.editVacancyById(vacancy_id, vacancy), HttpStatus.OK);
+            return new ResponseEntity<>(vacancyService.editVacancyById(vacancy_id, vacancy), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        // return vacancyService.editVacancyById(vacancy_id);
     }
-
-    /*@GetMapping(value = "/vacancy/{vacancyStatus}")
-    public ResponseEntity<List<Vacancy>> filterVacancyByStatus(@PathVariable VacancyStatus vacancyStatus, @RequestBody User user){
-        List<Vacancy> allVacancies = vacancyRepository.findByUser(user);
-
-    }*/
 
     @ApiOperation(value = "Filter vacancies by status")
     @PostMapping(value = "/vacancy")
     public List<Vacancy> filterVacanciesByStatus(@RequestParam Long user_id,
                                                  @RequestParam String vacancyStatus) {
-
         return vacancyService.filterByVacancyStatus(vacancyStatus, user_id);
-        //return null;
     }
 }
