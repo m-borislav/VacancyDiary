@@ -38,7 +38,6 @@ public class User implements UserDetails {
     @Column(name = "token_expiration_date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime tokenExpirationDate;
-
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
@@ -103,7 +102,6 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
-
 
 
     public String getPassword() {

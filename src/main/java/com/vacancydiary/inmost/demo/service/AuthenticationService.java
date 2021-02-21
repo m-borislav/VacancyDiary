@@ -12,11 +12,15 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AuthenticationService(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthenticationService(PasswordEncoder passwordEncoder,
+                                 AuthenticationManager authenticationManager,
+                                 UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     public boolean authenticate(User user, User userFromDb) {
@@ -27,10 +31,4 @@ public class AuthenticationService {
         }
         return false;
     }
-
-    /*public User updatePassword(User existingUser, String password) {
-        existingUser.setPassword(passwordEncoder.encode(password));
-        userRepository.save(existingUser);
-        return existingUser;
-    }*/
 }
